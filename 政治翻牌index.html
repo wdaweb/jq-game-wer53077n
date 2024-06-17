@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>政治明星翻牌</title>
+
+  <style>
+    body {
+      background: #1a1a1a;
+      padding: 0;
+      margin: 0;
+      margin-right: 4rem;
+    }
+
+    .container {
+      position: relative;
+      width: 80%;
+      margin: auto;
+      /* 或者根據你的需求設置具體寬度 */
+      /* height: 80%; */
+      /* 或者根據你的需求設置具體高度 */
+    }
+
+
+    .bank {
+      position: relative;
+      /* 確保 .bank 也有位置上下文 */
+      z-index: 1;
+      /* 確保 .bank 在 .TV 下面 */
+    }
+
+    .TV {
+      position: absolute;
+      top: 0;
+      /* 根據需要調整位置 */
+      left: 0;
+      /* 根據需要調整位置 */
+      z-index: 3;
+      /* 確保 .TV 在 .bank 上面 */
+      pointer-events: none;
+    }
+
+    .gameMedia {
+      position: absolute;
+      /* 確保 iframe 不會受到影響 */
+      z-index: 2;
+      /* 確保 iframe 不會被 .TV 遮蓋 */
+      /* pointer-events: none; */
+      width: 980px;
+      /* 根據需要設置寬度 */
+      height: 730px;
+      /* 根據需要設置高度 */
+      top: 5rem;
+      left: 15rem;
+      margin: 0;
+    }
+
+    .gameMedia iframe {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <img class="bank" src="./政治人物素材/畫面/電視螢幕_final.png">
+    <img class="TV" src="./政治人物素材/畫面/電視螢幕_電視_final.png">
+    <div class="gameMedia">
+      <iframe src="./main.html" frameborder="0" name="iframe" id="yourIframeId"></iframe>
+    </div>
+  </div>
+</body>
+
+</html>

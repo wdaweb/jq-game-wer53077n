@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+  <title>simple</title>
+  <!-- <link rel="stylesheet" href="sweetalert2.min.css"> -->
+  <style>
+    body {
+      background-image: url(./政治人物素材/畫面/純背景模糊980.jpg);
+      background-repeat: no-repeat;
+    }
+
+    .container {
+      width: 915px;
+      height: 505px;
+      /* background: #333; */
+      margin: 5rem 0 0 1.9rem;
+    }
+
+
+    .card {
+      width: 180px;
+      height: 220px;
+      position: relative;
+      margin-bottom: 1rem;
+      /* 設定子元素在 3D 空間內 */
+      transform-style: preserve-3d;
+      float: left;
+      transition: transform 1s;
+    }
+
+    .card-front {
+      width: 100%;
+      height: 100%;
+      background-image: url(./政治人物素材/card/簡單版/1.png);
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      position: absolute;
+      backface-visibility: hidden;
+    }
+
+    .card-back {
+      width: 100%;
+      height: 100%;
+      background-image: url(./政治人物素材/card/bankD.png);
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      position: absolute;
+      backface-visibility: hidden;
+      transform: rotateY(180deg);
+    }
+
+    .card-close {
+      transform: rotateY(180deg);
+    }
+
+    .btn {
+      margin: auto;
+      text-align: center;
+      position: absolute;
+      top: 35rem;
+      left: 11.5rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1 class="animate__animated animate__fadeInDown">
+      <div id="game"></div>
+    </h1>
+    <div class="btn">
+      <a href="./政治翻牌index.html" target="_top"><img src="./政治人物素材/畫面/遊戲中_首頁Btn.png"></a>
+      <a href=""><img src="./政治人物素材/畫面/遊戲中_困難狀態Btn.png"></a>
+      <a href="./simple.html" target="iframe"><img src="./政治人物素材/畫面/遊戲中_簡單Btn.png"></a>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js'
+    integrity='sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=='
+    crossorigin='anonymous'></script>
+  <script>
+    // 產生卡片
+    const cardTotal = 10;
+    for (let i = 0; i < cardTotal; i++) {
+      $('#game').append(`
+        <div class="card card-close">
+          <div class="card-front"></div>
+          <div class="card-back"></div>
+        </div>
+      `)
+    }
+
+    $('.card').each(function (index) {
+      const number = index + 1
+      $(this).find('.card-front').css('background-image', `url(./政治人物素材/card/困難版/${number}.png)`)
+      $(this).attr('data-number', number)
+    })
+
+    for (let i = 0; i < 20; i++) {
+      const randA = Math.round(Math.random() * 15)
+      const randB = Math.round(Math.random() * 15)
+      $('.card').eq(randA).insertAfter($('.card').eq(randB))
+    }
+
+    $('.card').click(function () {
+      // 翻牌
+      if (
+        // .card 沒有 .card-close 代表被翻開
+        // 如果已翻開數量小於 2
+        $('.card:not(.card-close)').length < 2 &&
+        // 這張牌還沒被翻開
+        $(this).hasClass('card-close') &&
+        // 這張牌還沒配對
+        !$(this).hasClass('card-ok')
+      ) {
+        $(this).removeClass('card-close')
+      }
+
+      // 翻開兩張了
+      if ($('.card:not(.card-close)').length === 2) {
+        // 如果兩張都一樣+
+        const cardList = [
+          Number($('.card:not(.card-close)').eq(0).attr('data-number')),
+          Number($('.card:not(.card-close)').eq(1).attr('data-number'))
+        ].sort((a, b) => a - b);
+        if (cardList[1] - cardList[0] === 1 && cardList[1] % 2 === 0) {
+          $('.card:not(.card-close)').addClass('card-ok')
+          $('.card:not(.card-close)').fadeTo(1000, 0)
+        }
+
+        setTimeout(function () {
+          $('.card:not(.card-close)').addClass('card-close')
+          if (
+            $('.card-ok').length === $('.card').length
+          ) {
+            Swal.fire({
+              confirmButtonText: "回首頁",
+              imageUrl: "./政治人物素材/card/知道的太多了.gif",
+              imageAlt: "牛逼",
+              confirmButtonColor: "#D72882",
+            }).then((result) => {
+              window.top.location = "./政治翻牌index.html";
+            });
+          }
+        }, 800)
+      }
+    })
+
+  </script>
+</body>
+
+</html>
